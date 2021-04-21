@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PlannterBeta</string>
+    <string-array name="tempTitleArr">
+        <item>Jojo Jostar</item>
+        <item>Joseph Jostar</item>
+        <item>Jorno Jostar</item>
+        <item>Jojske Jostar</item>
+        <item>Jotaro Jostar</item>
+        <item>Jonatan Jostar</item>
+    </string-array>
+    <string-array name="tempDescriptionArr">
+        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy. lorem ipsum dolor lorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorloripsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolor </item>
+        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
+        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
+        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
+        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
+        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
+    </string-array>
+
+</resources>
