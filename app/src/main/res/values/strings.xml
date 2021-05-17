@@ -1,20 +1,17 @@
 <resources>
     <string name="app_name">PlannterBeta</string>
-    <string-array name="tempTitleArr">
-        <item>Jojo Jostar</item>
-        <item>Joseph Jostar</item>
-        <item>Jorno Jostar</item>
-        <item>Jojske Jostar</item>
-        <item>Jotaro Jostar</item>
-        <item>Jonatan Jostar</item>
+    <string name="ALERT_CONFIRM">Confirm</string>
+    <string name="ALERT_DENY">Deny</string>
+    <string name="sort_spinner_name">Sort by:</string>
+    <string-array name="sort_spinner_entries">
+        <item>Date ↑</item>
+        <item>Date ↓</item>
+        <item>Alphabet ↑</item>
+        <item>Alphabet ↓</item>
     </string-array>
-    <string-array name="tempDescriptionArr">
-        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy. lorem ipsum dolor lorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolorloripsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumipsum dolorlorem ipsum dolorlorem ipsumem ipsum dolorlorem ipsum dolorlorem ipsum dolorlorem ipsum dolor </item>
-        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
-        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
-        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
-        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
-        <item>Hello there! Here is a Nikolaev Artem example for the his ToDo app. You see the prototype of my application. Enjoy.</item>
-    </string-array>
+    <string name="isChecklist_change_btn_default">Change view to checklist</string>
+    <string name="isChecklist_change_btn_active">Disable checklist appearance</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.PlainNoteInnerTextFragment">
+
+    <EditText
+        android:id="@+id/note_edit_etInnerText"
+        style="@style/Widget.AppCompat.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:lineHeight="22dp"
+        android:padding="5dp"
+        android:paddingTop="0dp"
+
+        android:textAllCaps="false"
+        android:textSize="18sp" />
+</FrameLayout>
