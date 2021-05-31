@@ -4,10 +4,10 @@
     <string name="ALERT_DENY">Deny</string>
     <string name="sort_spinner_name">Sort by:</string>
     <string-array name="sort_spinner_entries">
-        <item>Date ↑</item>
         <item>Date ↓</item>
-        <item>Alphabet ↑</item>
+        <item>Date ↑</item>
         <item>Alphabet ↓</item>
+        <item>Alphabet ↑</item>
     </string-array>
     <string name="isChecklist_change_btn_default">Change view to checklist</string>
     <string name="isChecklist_change_btn_active">Disable checklist appearance</string>

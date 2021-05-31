@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,14 @@ public class PlainNoteInnerTextFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         PlainNoteViewModel noteViewModel = new ViewModelProvider(requireActivity()).get(PlainNoteViewModel.class);
         innerTextView = view.findViewById(R.id.note_edit_etInnerText);
-        noteViewModel.getData().observe(requireActivity(), note -> {
-            innerTextView.setText(note.getInnerText());
+        innerTextView.setVerticalScrollBarEnabled(true);
+        innerTextView.setMovementMethod(new ScrollingMovementMethod());
+        noteViewModel.getDataInnerText().observe(requireActivity(), innerText -> {
+            innerTextView.setText(innerText);
         });
     }
 }

@@ -9,8 +9,12 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 import com.quazaru.plannter.R;
+import com.quazaru.plannter.ViewModels.PlainNoteViewModel;
+import com.quazaru.plannter.database.NoteDatabase.PlainNote;
 
 import java.util.Arrays;
 
@@ -33,13 +37,27 @@ public class ChecklistTapeAdapter extends RecyclerView.Adapter<ChecklistTapeAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Log.d("RCATCH_CLELEM", "Checklist fragment element " + elements[position] + " [" + position + "] ");
 
         holder.checkBox.setText(elements[position]);
+
     }
 
     @Override
     public int getItemCount() {
+        Log.d("RCATCH", "Checklist fragment elements length - " + elements.length);
         return elements.length;
+
+    }
+    public String[] getElementsArray() {
+        return elements;
+    }
+    public String getElementsString() {
+        StringBuilder elementsString = new StringBuilder();
+        for (String element: elements) {
+            elementsString.append(element + "\n");
+        }
+        return elementsString.toString();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

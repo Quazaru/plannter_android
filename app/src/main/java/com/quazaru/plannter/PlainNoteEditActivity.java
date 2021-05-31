@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,15 +25,19 @@ import com.quazaru.plannter.database.NoteDatabase.NoteViewModel;
 import com.quazaru.plannter.database.NoteDatabase.PlainNote;
 import com.quazaru.plannter.fragments.ChecklistFragment;
 import com.quazaru.plannter.fragments.PlainNoteInnerTextFragment;
+import com.quazaru.plannter.myAdapters.ChecklistTapeAdapter;
 
 public class PlainNoteEditActivity extends AppCompatActivity {
     PlainNote currentNote;
     NoteViewModel viewModel;
+    PlainNoteViewModel noteViewModel;
+
 
     EditText noteTitleView;
     EditText noteInnerTextView;
     TextView noteTimeView;
     RecyclerView noteTagsView;
+    RecyclerView noteCheckListRecycleView;
     NestedScrollView nsvOptionsMenu;
     ImageButton imgBtnShowOptions;
     Button btnIsChecklistSwitcher;
@@ -55,7 +60,6 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         currentNote.setCheckList(intent.getIntExtra("noteIsCheckList", 0));
         // Initialization of views
         noteTitleView = findViewById(R.id.tvNoteTitle_opened);
-        noteInnerTextView = findViewById(R.id.etNoteInnerText_opened);
         noteTimeView = findViewById(R.id.tvNoteTime_opened);
         noteTagsView = findViewById(R.id.rvNoteTags_opened);
         backBtn = findViewById(R.id.noteEdit_fabBackArrow);
@@ -74,7 +78,7 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
         // Set view's text
         noteTitleView.setText(currentNote.getTitle());
-        noteInnerTextView.setText(currentNote.getInnerText());
+
         noteTimeView.setText(currentNote.getNoteTimeString());
         noteTagsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -82,8 +86,7 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         // set smooth scroll to editTexts
         noteTitleView.setVerticalScrollBarEnabled(true);
         noteTitleView.setMovementMethod(new ScrollingMovementMethod());
-        noteInnerTextView.setVerticalScrollBarEnabled(true);
-        noteInnerTextView.setMovementMethod(new ScrollingMovementMethod());
+
 
         backBtn.setOnClickListener((v) -> {
             saveNote(currentNote.getTitle(), currentNote.getInnerText());
@@ -91,27 +94,25 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         });
 
         // Init and view fragments
+        // set data to fragment's visibility
+        noteViewModel = new ViewModelProvider(this).get(PlainNoteViewModel.class);
+        noteViewModel.setDataInnerText(currentNote.getInnerText());
+
+
         Fragment checklistFragment = new ChecklistFragment();
         Fragment textFragment = new PlainNoteInnerTextFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.flEditNoteFragment, textFragment)
                 .commit();
-        noteInnerTextView.setVisibility(View.GONE);
 
-        // set data to fragment's visibility
-        PlainNoteViewModel noteViewModel = new ViewModelProvider(this).get(PlainNoteViewModel.class);
-        noteViewModel.setData(currentNote);
 
         // If note is a checklist, set checklist fragment
         if(currentNote.isCheckList() == 1 ) {
             replaceFragment(R.id.flEditNoteFragment, checklistFragment);
             btnIsChecklistSwitcher.setText(getResources().getString(R.string.isChecklist_change_btn_active));
-            noteViewModel.setData(currentNote);
-
+            Log.d("RCATCH", "Checklist Recycler view  - " + noteCheckListRecycleView);
         }
-
-
 
         // Checklist mode switcher handler
         btnIsChecklistSwitcher.setOnClickListener((v) -> {
@@ -119,20 +120,18 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
             PlainNote newNote = prepareNoteToSave();
             newNote.setCheckList(currentNote.isCheckList());
-
             if(newNote.isCheckList() == 0) {
                 currentNote.setCheckList(1);
                 replaceFragment(R.id.flEditNoteFragment, checklistFragment);
+                noteCheckListRecycleView = findViewById(R.id.ChecklistFragmentRecyclerView);
                 clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_active));
             } else {
                 currentNote.setCheckList(0);
                 replaceFragment(R.id.flEditNoteFragment, textFragment);
                 clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_default));
             }
-            noteViewModel.setData(currentNote);
             newNote.setCheckList(currentNote.isCheckList());
             saveNote(newNote);
-
         });
 
 
@@ -152,12 +151,13 @@ public class PlainNoteEditActivity extends AppCompatActivity {
     }
 
     public void saveNote(String oldTitle, String oldInnerText) {
+
         if(oldTitle.equals(noteTitleView.getText().toString()) &&
-           oldInnerText.equals(noteInnerTextView.getText().toString())) {
+           oldInnerText.equals(noteViewModel.getDataInnerText().getValue())) {
             return; // Return if nothing changed
         }
         currentNote.setTitle(noteTitleView.getText().toString());
-        currentNote.setInnerText(noteInnerTextView.getText().toString());
+        currentNote.setInnerText(noteViewModel.getDataInnerText().getValue());
         viewModel = NoteViewModel.getViewModel(this, this);
         viewModel.addNote(currentNote);
     }
@@ -167,7 +167,11 @@ public class PlainNoteEditActivity extends AppCompatActivity {
     }
 
     public PlainNote prepareNoteToSave() {
-        PlainNote newNote = new PlainNote(noteTitleView.getText().toString(), noteInnerTextView.getText().toString(), new String[] {""});
+        PlainNote newNote;
+        noteInnerTextView = findViewById(R.id.note_edit_etInnerText);
+        noteCheckListRecycleView = findViewById(R.id.ChecklistFragmentRecyclerView);
+            newNote = new PlainNote(noteTitleView.getText().toString(), noteViewModel.getDataInnerText().getValue(), new String[] {""});
+
         newNote.setId(currentNote.getId());
         newNote.setCheckList(currentNote.isCheckList());
         return  newNote;
