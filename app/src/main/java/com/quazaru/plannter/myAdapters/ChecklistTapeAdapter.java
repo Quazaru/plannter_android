@@ -1,13 +1,18 @@
 package com.quazaru.plannter.myAdapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.quazaru.plannter.R;
+
+import java.util.Arrays;
 
 public class ChecklistTapeAdapter extends RecyclerView.Adapter<ChecklistTapeAdapter.MyViewHolder> {
     Context context;
@@ -15,6 +20,7 @@ public class ChecklistTapeAdapter extends RecyclerView.Adapter<ChecklistTapeAdap
     public ChecklistTapeAdapter(Context context, String[] elements) {
         this.context = context;
         this.elements = elements;
+        Log.d("RCATCH", "Checklist fragment elements - " + Arrays.toString(elements));
     }
 
     @NonNull
@@ -27,6 +33,7 @@ public class ChecklistTapeAdapter extends RecyclerView.Adapter<ChecklistTapeAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+
         holder.checkBox.setText(elements[position]);
     }
 

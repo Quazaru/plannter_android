@@ -3,6 +3,8 @@ package com.quazaru.plannter;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,22 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.quazaru.plannter.ViewModels.PlainNoteViewModel;
 import com.quazaru.plannter.database.NoteDatabase.NoteViewModel;
 import com.quazaru.plannter.database.NoteDatabase.PlainNote;
 import com.quazaru.plannter.fragments.ChecklistFragment;
 import com.quazaru.plannter.fragments.PlainNoteInnerTextFragment;
 
 public class PlainNoteEditActivity extends AppCompatActivity {
-    String noteTitleString;
-    String noteInnerTextString;
-    String noteTimeString;
-    String noteTagsString;
-    int noteIsCheckList;
-    int noteId;
     PlainNote currentNote;
-
     NoteViewModel viewModel;
 
     EditText noteTitleView;
@@ -72,26 +69,8 @@ public class PlainNoteEditActivity extends AppCompatActivity {
                 nsvOptionsMenu.setVisibility(View.GONE);
             } else { nsvOptionsMenu.setVisibility(View.VISIBLE); }
         });
-        if(currentNote.isCheckList() == 1) {
-            btnIsChecklistSwitcher.setText(getResources().getString(R.string.isChecklist_change_btn_active));
-        }
-        btnIsChecklistSwitcher.setOnClickListener((v) -> {
-            Button clickedBtn = (Button) v;
 
-            PlainNote newNote = prepareNoteToSave();
-            newNote.setCheckList(currentNote.isCheckList());
 
-            if(newNote.isCheckList() == 0) {
-                currentNote.setCheckList(1);
-                clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_active));
-            } else {
-                currentNote.setCheckList(0);
-                clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_default));
-            }
-            newNote.setCheckList(currentNote.isCheckList());
-            saveNote(newNote);
-
-        });
 
         // Set view's text
         noteTitleView.setText(currentNote.getTitle());
@@ -111,6 +90,7 @@ public class PlainNoteEditActivity extends AppCompatActivity {
             finish();
         });
 
+        // Init and view fragments
         Fragment checklistFragment = new ChecklistFragment();
         Fragment textFragment = new PlainNoteInnerTextFragment();
 
@@ -118,8 +98,47 @@ public class PlainNoteEditActivity extends AppCompatActivity {
                 .replace(R.id.flEditNoteFragment, textFragment)
                 .commit();
         noteInnerTextView.setVisibility(View.GONE);
-        EditText editText = findViewById(R.id.note_edit_etInnerText);
-        editText.setText("TEST DATA");
+
+        // set data to fragment's visibility
+        PlainNoteViewModel noteViewModel = new ViewModelProvider(this).get(PlainNoteViewModel.class);
+        noteViewModel.setData(currentNote);
+
+        // If note is a checklist, set checklist fragment
+        if(currentNote.isCheckList() == 1 ) {
+            replaceFragment(R.id.flEditNoteFragment, checklistFragment);
+            btnIsChecklistSwitcher.setText(getResources().getString(R.string.isChecklist_change_btn_active));
+            noteViewModel.setData(currentNote);
+
+        }
+
+
+
+        // Checklist mode switcher handler
+        btnIsChecklistSwitcher.setOnClickListener((v) -> {
+            Button clickedBtn = (Button) v;
+
+            PlainNote newNote = prepareNoteToSave();
+            newNote.setCheckList(currentNote.isCheckList());
+
+            if(newNote.isCheckList() == 0) {
+                currentNote.setCheckList(1);
+                replaceFragment(R.id.flEditNoteFragment, checklistFragment);
+                clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_active));
+            } else {
+                currentNote.setCheckList(0);
+                replaceFragment(R.id.flEditNoteFragment, textFragment);
+                clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_default));
+            }
+            noteViewModel.setData(currentNote);
+            newNote.setCheckList(currentNote.isCheckList());
+            saveNote(newNote);
+
+        });
+
+
+
+
+
     }
 
 
@@ -137,8 +156,6 @@ public class PlainNoteEditActivity extends AppCompatActivity {
            oldInnerText.equals(noteInnerTextView.getText().toString())) {
             return; // Return if nothing changed
         }
-//        PlainNote newNote = new PlainNote(noteTitleView.getText().toString(), noteInnerTextView.getText().toString(), new String[] {""});
-//        newNote.setId(noteId);
         currentNote.setTitle(noteTitleView.getText().toString());
         currentNote.setInnerText(noteInnerTextView.getText().toString());
         viewModel = NoteViewModel.getViewModel(this, this);
@@ -154,6 +171,12 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         newNote.setId(currentNote.getId());
         newNote.setCheckList(currentNote.isCheckList());
         return  newNote;
+    }
+
+    public void replaceFragment(int viewId, Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(viewId, fragment)
+                .commit();
     }
 
 

@@ -45,12 +45,12 @@ public class CommonTapeAdapter extends RecyclerView.Adapter<CommonTapeAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String innerText = plainNotes.get(position).getInnerText();
-        String[] tasks = innerText.split("\n");
-         Arrays.stream(tasks).map((s) -> {
+        String[] textRows = innerText.split("\n");
+         Arrays.stream(textRows).map((s) -> {
             s += " | ";
             return s;
         });
-        Optional<String> innerResult = Arrays.stream(tasks).reduce((current, next) -> {
+        Optional<String> innerResult = Arrays.stream(textRows).reduce((current, next) -> {
             current += "|\n" + next;
             return current;
         });
