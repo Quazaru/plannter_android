@@ -1,11 +1,14 @@
 package com.quazaru.plannter.myAdapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,8 +41,18 @@ public class ChecklistTapeAdapter extends RecyclerView.Adapter<ChecklistTapeAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Log.d("RCATCH_CLELEM", "Checklist fragment element " + elements[position] + " [" + position + "] ");
+        CheckBox checkbox = holder.checkBox;
+        checkbox.setText(elements[position]);
+        checkbox.setOnCheckedChangeListener((v, isChecked) -> {
+            if(isChecked == true) {
+                v.setPaintFlags(v.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                v.setTextColor(Color.GRAY);
+            } else {
+                v.setPaintFlags((v.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)));
+                v.setTextColor(Color.BLACK);
+            }
+        });
 
-        holder.checkBox.setText(elements[position]);
 
     }
 

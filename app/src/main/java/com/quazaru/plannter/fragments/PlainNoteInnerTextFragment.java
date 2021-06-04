@@ -16,9 +16,15 @@ import android.widget.Toast;
 
 import com.quazaru.plannter.R;
 import com.quazaru.plannter.ViewModels.PlainNoteViewModel;
+import com.quazaru.plannter.database.myListeners.MyEventNotifier;
+
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class PlainNoteInnerTextFragment extends Fragment {
     EditText innerTextView;
+    MyEventNotifier noteDidSaveNotifier;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,8 +40,23 @@ public class PlainNoteInnerTextFragment extends Fragment {
         innerTextView = view.findViewById(R.id.note_edit_etInnerText);
         innerTextView.setVerticalScrollBarEnabled(true);
         innerTextView.setMovementMethod(new ScrollingMovementMethod());
+        innerTextView.setText(noteViewModel.getDataInnerText().getValue());
         noteViewModel.getDataInnerText().observe(requireActivity(), innerText -> {
             innerTextView.setText(innerText);
+        });
+
+
+        // SAVING NOTE
+        noteDidSaveNotifier = noteViewModel.getNoteDidSaveNotifier().getValue();
+        MyEventNotifier noteSaveNotifier = noteViewModel.getNoteToSaveNotifier().getValue();
+        noteSaveNotifier.addObserver(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName() == "text") {
+                    noteViewModel.setDataInnerText(innerTextView.getText().toString());
+                    noteDidSaveNotifier.notifyObservers();
+                }
+            }
         });
     }
 }

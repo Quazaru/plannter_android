@@ -40,6 +40,8 @@ public class PlainNote implements drawableNote {
     protected String noteTimeString = "";
     @ColumnInfo(name = "isCheckList", defaultValue = "0")
     protected int isCheckList;
+    @ColumnInfo(name="checkedIndexes")
+    protected String checkedIndexes;
 
     @Ignore
     public static final Comparator<PlainNote> NOTES_ID_COMPARATOR = new Comparator<PlainNote>() {
@@ -178,4 +180,13 @@ public class PlainNote implements drawableNote {
     }
     public int getId() {return id;};
     public void setId(int id) {this.id = id; }
+    public String getCheckedIndexes() {
+        return checkedIndexes;
+    }
+    public void setCheckedIndexes(String checkedIndexes) {
+        this.checkedIndexes = checkedIndexes;
+    }
+    public void appendCheckedIndexes(String string) {
+        this.checkedIndexes = this.checkedIndexes + "," + string;
+    }
 }

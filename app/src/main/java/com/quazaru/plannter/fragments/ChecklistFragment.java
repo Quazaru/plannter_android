@@ -18,9 +18,12 @@ import android.widget.Toast;
 import com.quazaru.plannter.PlainNoteEditActivity;
 import com.quazaru.plannter.R;
 import com.quazaru.plannter.ViewModels.PlainNoteViewModel;
+import com.quazaru.plannter.database.myListeners.MyEventNotifier;
 import com.quazaru.plannter.myAdapters.ChecklistTapeAdapter;
 import com.quazaru.plannter.myAdapters.CommonTapeAdapter;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +31,8 @@ import java.util.List;
 public class ChecklistFragment extends Fragment {
     RecyclerView rvChecklistTape;
     String[] rowsArray;
+
+    MyEventNotifier noteDidSaveNotifier;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,6 +66,22 @@ public class ChecklistFragment extends Fragment {
             ChecklistTapeAdapter tapeAdapter = new ChecklistTapeAdapter(requireActivity() , rowsArray);
             rvChecklistTape.setAdapter(tapeAdapter);
         }
+
+
+        // SAVING NOTE
+        noteDidSaveNotifier = viewModel.getNoteDidSaveNotifier().getValue();
+        MyEventNotifier noteToSaveNotifier = viewModel.getNoteToSaveNotifier().getValue();
+        noteToSaveNotifier.addObserver(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName() == "checklist") {
+                    String newInnerText = ((ChecklistTapeAdapter)rvChecklistTape.getAdapter()).getElementsString();
+                    viewModel.setDataInnerText(newInnerText);
+                    noteDidSaveNotifier.notifyObservers();
+                }
+            }
+        });
+
 
 
 

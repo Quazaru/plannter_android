@@ -16,7 +16,7 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(version = 2, entities = {PlainNote.class}, exportSchema = false)
+@Database(version = 3, entities = {PlainNote.class}, exportSchema = false)
 public abstract class NoteDatabase extends RoomDatabase {
     public abstract NoteDAO noteDAO();
     private static volatile NoteDatabase INSTANCE = null;
@@ -33,6 +33,7 @@ public abstract class NoteDatabase extends RoomDatabase {
                     Room.databaseBuilder(context.getApplicationContext(),
                                          NoteDatabase.class, "note_database")
                             .addMigrations(MIGRATION_1_2)
+                            .addMigrations(MIGRATION_2_3)
                             .build();
             INSTANCE = instance;
             return instance;
@@ -43,6 +44,12 @@ public abstract class NoteDatabase extends RoomDatabase {
         @Override
         public void migrate(final SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE note_table ADD COLUMN isCheckList INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+    public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(final SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE note_table ADD COLUMN checkedIndexes TEXT");
         }
     };
 }

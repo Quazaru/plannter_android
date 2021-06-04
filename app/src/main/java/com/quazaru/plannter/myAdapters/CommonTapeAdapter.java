@@ -45,18 +45,6 @@ public class CommonTapeAdapter extends RecyclerView.Adapter<CommonTapeAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String innerText = plainNotes.get(position).getInnerText();
-        String[] textRows = innerText.split("\n");
-         Arrays.stream(textRows).map((s) -> {
-            s += " | ";
-            return s;
-        });
-        Optional<String> innerResult = Arrays.stream(textRows).reduce((current, next) -> {
-            current += "|\n" + next;
-            return current;
-        });
-
-
-
         String noteTitle = (plainNotes.get(position).getTitle());
         String noteInnerText = (plainNotes.get(position).getInnerText());
         String noteTimeString = (plainNotes.get(position).getNoteTimeString());
@@ -65,7 +53,7 @@ public class CommonTapeAdapter extends RecyclerView.Adapter<CommonTapeAdapter.My
         int isCheckList = plainNotes.get(position).isCheckList();
 
         holder.tvTitle.setText(noteTitle);
-        holder.tvInnerText.setText(innerResult.get());
+        holder.tvInnerText.setText(innerText);
         holder.tvDate.setText(noteTimeString);
 
         holder.viewHolder.setOnClickListener((v) -> {

@@ -23,14 +23,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.quazaru.plannter.ViewModels.PlainNoteViewModel;
 import com.quazaru.plannter.database.NoteDatabase.NoteViewModel;
 import com.quazaru.plannter.database.NoteDatabase.PlainNote;
+import com.quazaru.plannter.database.myListeners.MyEventNotifier;
+import com.quazaru.plannter.database.myListeners.MyEventObserver;
 import com.quazaru.plannter.fragments.ChecklistFragment;
 import com.quazaru.plannter.fragments.PlainNoteInnerTextFragment;
 import com.quazaru.plannter.myAdapters.ChecklistTapeAdapter;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Calendar;
 
 public class PlainNoteEditActivity extends AppCompatActivity {
     PlainNote currentNote;
     NoteViewModel viewModel;
     PlainNoteViewModel noteViewModel;
+    MyEventNotifier noteToSaveNotifier;
+    MyEventNotifier noteDidSaveNotifier;
 
 
     EditText noteTitleView;
@@ -89,6 +97,13 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
 
         backBtn.setOnClickListener((v) -> {
+            String noteType;
+            if(currentNote.isCheckList() == 1) {
+                noteType = "checklist";
+            } else {
+                noteType = "text";
+            }
+            noteToSaveNotifier.notifyObservers(noteType);
             saveNote(currentNote.getTitle(), currentNote.getInnerText());
             finish();
         });
@@ -96,8 +111,38 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         // Init and view fragments
         // set data to fragment's visibility
         noteViewModel = new ViewModelProvider(this).get(PlainNoteViewModel.class);
+        noteToSaveNotifier = new MyEventNotifier();
+        noteDidSaveNotifier = new MyEventNotifier();
+        noteViewModel.setNote(currentNote);
+        // DEPRECATED
         noteViewModel.setDataInnerText(currentNote.getInnerText());
+        noteViewModel.setCheckedIndexes(currentNote.getCheckedIndexes());
 
+        noteViewModel.getDataInnerText().observe(this, newInnerText -> {
+            PlainNote newNote = prepareNoteToSave();
+            newNote.setInnerText(newInnerText);
+            saveNote(newNote);
+        });
+        noteViewModel.getCheckedIndexes().observe(this, newCheckedIndexes -> {
+            PlainNote newNote = prepareNoteToSave();
+            newNote.setCheckedIndexes(newCheckedIndexes);
+            saveNote(newNote);
+        });
+
+
+
+        MyEventObserver noteDidSaveObserver = new MyEventObserver(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                PlainNote newNote = prepareNoteToSave();
+                newNote.setCheckedIndexes(noteViewModel.getCheckedIndexes().getValue());
+                newNote.setInnerText(noteViewModel.getDataInnerText().getValue());
+                saveNote(newNote);
+            }
+        });
+        noteDidSaveNotifier.addObserver(noteDidSaveObserver.listener);
+        noteViewModel.setNoteDidSaveNotifier(noteDidSaveNotifier);
+        noteViewModel.setNoteToSaveNotifier(noteToSaveNotifier);
 
         Fragment checklistFragment = new ChecklistFragment();
         Fragment textFragment = new PlainNoteInnerTextFragment();
@@ -117,8 +162,13 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         // Checklist mode switcher handler
         btnIsChecklistSwitcher.setOnClickListener((v) -> {
             Button clickedBtn = (Button) v;
-
+            Calendar currentNoteTime = currentNote.getNoteEditTime();
+            String currentNoteTimeString = currentNote.getNoteTimeString();
             PlainNote newNote = prepareNoteToSave();
+            
+            newNote.setNoteEditTime(currentNoteTime);
+            newNote.setNoteTimeString(currentNoteTimeString);
+
             newNote.setCheckList(currentNote.isCheckList());
             if(newNote.isCheckList() == 0) {
                 currentNote.setCheckList(1);
@@ -131,7 +181,14 @@ public class PlainNoteEditActivity extends AppCompatActivity {
                 clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_default));
             }
             newNote.setCheckList(currentNote.isCheckList());
-            saveNote(newNote);
+            String noteType;
+            if(currentNote.isCheckList() == 1) {
+                noteType = "checklist";
+            } else {
+                noteType = "text";
+            }
+            noteToSaveNotifier.notifyObservers(noteType);
+
         });
 
 
@@ -143,10 +200,15 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        String noteType;
+        if(currentNote.isCheckList() == 1) {
+            noteType = "checklist";
+        } else {
+            noteType = "text";
+        }
+        noteToSaveNotifier.notifyObservers(noteType);
         super.onBackPressed();
-        Intent intent = getIntent();
-        saveNote(intent.getStringExtra("noteTitle"),
-                intent.getStringExtra("noteInnerText"));
+
 
     }
 
