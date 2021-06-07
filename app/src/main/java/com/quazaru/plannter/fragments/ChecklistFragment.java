@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.quazaru.plannter.PlainNoteEditActivity;
 import com.quazaru.plannter.R;
 import com.quazaru.plannter.ViewModels.PlainNoteViewModel;
+import com.quazaru.plannter.database.NoteDatabase.PlainNote;
 import com.quazaru.plannter.database.myListeners.MyEventNotifier;
 import com.quazaru.plannter.myAdapters.ChecklistTapeAdapter;
 import com.quazaru.plannter.myAdapters.CommonTapeAdapter;
@@ -52,14 +53,12 @@ public class ChecklistFragment extends Fragment {
         rvChecklistTape = view.findViewById(R.id.ChecklistFragmentRecyclerView);
         rvChecklistTape.setLayoutManager(new LinearLayoutManager(requireContext()));
         PlainNoteViewModel viewModel = new ViewModelProvider(requireActivity()).get(PlainNoteViewModel.class);
+        PlainNote viewModelNote = viewModel.getNote().getValue();
 
-        String[] textRows = viewModel.getDataInnerText().getValue().split("\n");
-        rowsArray = textRows;
-        viewModel.getDataInnerText().observe(requireActivity(), innerText -> {
-            String[] newTextRows = innerText.split("\n");
-            rowsArray = textRows;
-            Log.d("RCATCH", "ChecklistFragment: textRows: " + Arrays.toString(textRows) + " [ " +  textRows.length + " ]");
-            ChecklistTapeAdapter newTapeAdapter = new ChecklistTapeAdapter(requireActivity() , textRows);
+        rowsArray = viewModelNote.getInnerText().split("\n");
+        viewModel.getNote().observe(requireActivity(), note -> {
+            rowsArray = note.getInnerText().split("\n");
+            ChecklistTapeAdapter newTapeAdapter = new ChecklistTapeAdapter(requireActivity() , rowsArray);
             rvChecklistTape.setAdapter(newTapeAdapter);
         });
         if(rowsArray != null && rowsArray.length > 0) {
@@ -74,11 +73,17 @@ public class ChecklistFragment extends Fragment {
         noteToSaveNotifier.addObserver(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getPropertyName() == "checklist") {
-                    String newInnerText = ((ChecklistTapeAdapter)rvChecklistTape.getAdapter()).getElementsString();
-                    viewModel.setDataInnerText(newInnerText);
-                    noteDidSaveNotifier.notifyObservers();
-                }
+                String[] preferences = evt.getPropertyName().split("_");
+                Log.d("SCATCH", "preferences[0] = " + preferences[0] + " - fragment type");
+                if(!preferences[0].equals("checklist")) {
+                    Log.d("SCATCH", "preferences[0] != " + "checklist" + " - fragment type checking");
+
+                    return; }
+                Log.d("SCATCH", Arrays.toString(preferences));
+                String newInnerText = ((ChecklistTapeAdapter)rvChecklistTape.getAdapter()).getElementsString();
+                viewModelNote.setInnerText(newInnerText);
+                viewModel.setNote(viewModelNote);
+                noteDidSaveNotifier.notifyObservers();
             }
         });
 

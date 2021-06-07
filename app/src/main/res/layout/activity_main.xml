@@ -27,23 +27,10 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:tint="#EDEDED"
-        app:backgroundTint="@color/teal_200"
+        app:backgroundTint="#00CC76"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add" />
-
-    <TextView
-        android:id="@+id/tvTestArea"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/rvCommonNoteList"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvCommonNoteList"
-        app:layout_constraintVertical_bias="1.0" />
 
     <Spinner
         android:id="@+id/mainActivity_sortingSpinner"

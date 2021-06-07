@@ -70,7 +70,7 @@ public class CommonTapeAdapter extends RecyclerView.Adapter<CommonTapeAdapter.My
 
         holder.viewHolder.setOnLongClickListener((v) -> {
             AlertDialog dialog = createNoteDeleteConfirmDialog(context,
-                    "Do you really want to delete \"" + noteTitle + "\"",
+                    "Вы правда хотите удалить \"" + noteTitle + "\"?",
                     noteId);
             dialog.show();
             return false;
@@ -99,7 +99,7 @@ public class CommonTapeAdapter extends RecyclerView.Adapter<CommonTapeAdapter.My
 
     public AlertDialog createNoteDeleteConfirmDialog(Context context, String alertMessage, long noteId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Delete this note?")
+        builder.setTitle("Удалить заметку?")
                 .setMessage(alertMessage)
                 .setPositiveButton(R.string.ALERT_CONFIRM, ((dialog, which) -> {
                     NoteViewModel.getViewModel(context, (AppCompatActivity) context).deleteNoteById(noteId);

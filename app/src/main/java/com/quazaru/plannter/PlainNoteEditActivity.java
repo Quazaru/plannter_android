@@ -42,7 +42,6 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
 
     EditText noteTitleView;
-    EditText noteInnerTextView;
     TextView noteTimeView;
     RecyclerView noteTagsView;
     RecyclerView noteCheckListRecycleView;
@@ -64,7 +63,6 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         currentNote.setInnerText(intent.getStringExtra("noteInnerText"));
         currentNote.setNoteTimeString(intent.getStringExtra("noteTimeString"));
         currentNote.setId(intent.getIntExtra("noteId", 0));
-        currentNote.setNoteTimeString(intent.getStringExtra("noteTagsString"));
         currentNote.setCheckList(intent.getIntExtra("noteIsCheckList", 0));
         // Initialization of views
         noteTitleView = findViewById(R.id.tvNoteTitle_opened);
@@ -97,14 +95,6 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
 
         backBtn.setOnClickListener((v) -> {
-            String noteType;
-            if(currentNote.isCheckList() == 1) {
-                noteType = "checklist";
-            } else {
-                noteType = "text";
-            }
-            noteToSaveNotifier.notifyObservers(noteType);
-            saveNote(currentNote.getTitle(), currentNote.getInnerText());
             finish();
         });
 
@@ -114,19 +104,14 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         noteToSaveNotifier = new MyEventNotifier();
         noteDidSaveNotifier = new MyEventNotifier();
         noteViewModel.setNote(currentNote);
-        // DEPRECATED
-        noteViewModel.setDataInnerText(currentNote.getInnerText());
-        noteViewModel.setCheckedIndexes(currentNote.getCheckedIndexes());
 
-        noteViewModel.getDataInnerText().observe(this, newInnerText -> {
+        noteViewModel.getNote().observe(this, note -> {
             PlainNote newNote = prepareNoteToSave();
-            newNote.setInnerText(newInnerText);
-            saveNote(newNote);
+            newNote.setInnerText(note.getInnerText());
         });
-        noteViewModel.getCheckedIndexes().observe(this, newCheckedIndexes -> {
+        noteViewModel.getNote().observe(this, note -> {
             PlainNote newNote = prepareNoteToSave();
-            newNote.setCheckedIndexes(newCheckedIndexes);
-            saveNote(newNote);
+            newNote.setCheckedIndexes(note.getCheckedIndexes());
         });
 
 
@@ -135,8 +120,9 @@ public class PlainNoteEditActivity extends AppCompatActivity {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 PlainNote newNote = prepareNoteToSave();
-                newNote.setCheckedIndexes(noteViewModel.getCheckedIndexes().getValue());
-                newNote.setInnerText(noteViewModel.getDataInnerText().getValue());
+                newNote.setCheckedIndexes(noteViewModel.getNote().getValue().getCheckedIndexes());
+                newNote.setInnerText(noteViewModel.getNote().getValue().getInnerText());
+                noteViewModel.setNote(newNote);
                 saveNote(newNote);
             }
         });
@@ -152,14 +138,11 @@ public class PlainNoteEditActivity extends AppCompatActivity {
                 .commit();
 
 
-        // If note is a checklist, set checklist fragment
         if(currentNote.isCheckList() == 1 ) {
             replaceFragment(R.id.flEditNoteFragment, checklistFragment);
             btnIsChecklistSwitcher.setText(getResources().getString(R.string.isChecklist_change_btn_active));
-            Log.d("RCATCH", "Checklist Recycler view  - " + noteCheckListRecycleView);
         }
 
-        // Checklist mode switcher handler
         btnIsChecklistSwitcher.setOnClickListener((v) -> {
             Button clickedBtn = (Button) v;
             Calendar currentNoteTime = currentNote.getNoteEditTime();
@@ -168,12 +151,11 @@ public class PlainNoteEditActivity extends AppCompatActivity {
             
             newNote.setNoteEditTime(currentNoteTime);
             newNote.setNoteTimeString(currentNoteTimeString);
-
             newNote.setCheckList(currentNote.isCheckList());
+
             if(newNote.isCheckList() == 0) {
                 currentNote.setCheckList(1);
                 replaceFragment(R.id.flEditNoteFragment, checklistFragment);
-                noteCheckListRecycleView = findViewById(R.id.ChecklistFragmentRecyclerView);
                 clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_active));
             } else {
                 currentNote.setCheckList(0);
@@ -181,13 +163,10 @@ public class PlainNoteEditActivity extends AppCompatActivity {
                 clickedBtn.setText(getResources().getString(R.string.isChecklist_change_btn_default));
             }
             newNote.setCheckList(currentNote.isCheckList());
-            String noteType;
-            if(currentNote.isCheckList() == 1) {
-                noteType = "checklist";
-            } else {
-                noteType = "text";
-            }
-            noteToSaveNotifier.notifyObservers(noteType);
+
+            noteViewModel.setNote(newNote);
+            saveNote(newNote);
+
 
         });
 
@@ -198,44 +177,47 @@ public class PlainNoteEditActivity extends AppCompatActivity {
     }
 
 
+
     @Override
-    public void onBackPressed() {
+    protected void onPause() {
         String noteType;
         if(currentNote.isCheckList() == 1) {
             noteType = "checklist";
         } else {
             noteType = "text";
         }
-        noteToSaveNotifier.notifyObservers(noteType);
-        super.onBackPressed();
-
-
+        Log.d("SCATCH_save", "Save from  - onPause - ");
+        noteToSaveNotifier.notifyObservers(noteType + "_global");
+        super.onPause();
     }
 
     public void saveNote(String oldTitle, String oldInnerText) {
+        PlainNote newNote = noteViewModel.getNote().getValue();
+        viewModel = NoteViewModel.getViewModel(this, this);
 
         if(oldTitle.equals(noteTitleView.getText().toString()) &&
-           oldInnerText.equals(noteViewModel.getDataInnerText().getValue())) {
+           oldInnerText.equals(newNote.getInnerText())) {
             return; // Return if nothing changed
         }
         currentNote.setTitle(noteTitleView.getText().toString());
-        currentNote.setInnerText(noteViewModel.getDataInnerText().getValue());
-        viewModel = NoteViewModel.getViewModel(this, this);
+        currentNote.setInnerText(newNote.getInnerText());
+
         viewModel.addNote(currentNote);
     }
     public void saveNote(PlainNote note) {
         viewModel = NoteViewModel.getViewModel(this, this);
+
         viewModel.addNote(note);
     }
 
     public PlainNote prepareNoteToSave() {
         PlainNote newNote;
-        noteInnerTextView = findViewById(R.id.note_edit_etInnerText);
-        noteCheckListRecycleView = findViewById(R.id.ChecklistFragmentRecyclerView);
-            newNote = new PlainNote(noteTitleView.getText().toString(), noteViewModel.getDataInnerText().getValue(), new String[] {""});
+        PlainNote viewModelNote = noteViewModel.getNote().getValue();
 
+        newNote = new PlainNote(noteTitleView.getText().toString(), viewModelNote.getInnerText(), new String[] {""});
         newNote.setId(currentNote.getId());
         newNote.setCheckList(currentNote.isCheckList());
+
         return  newNote;
     }
 

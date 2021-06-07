@@ -1,5 +1,7 @@
 package com.quazaru.plannter.database.myListeners;
 
+import android.content.Context;
+
 import com.quazaru.plannter.database.NoteDatabase.PlainNote;
 
 import java.beans.PropertyChangeEvent;
@@ -18,6 +20,11 @@ public class MyEventNotifier {
     public void notifyObservers(String propertyName) {
         for (PropertyChangeListener observer: eventObservers) {
             observer.propertyChange(new PropertyChangeEvent(this, propertyName, 0, 1));
+        }
+    }
+    public void notifyObservers(Context context, String propertyName, Object oldValue, Object newValue) {
+        for (PropertyChangeListener observer: eventObservers) {
+            observer.propertyChange(new PropertyChangeEvent(context, propertyName, oldValue, newValue));
         }
     }
 

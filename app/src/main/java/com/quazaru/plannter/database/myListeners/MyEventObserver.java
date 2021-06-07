@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 
 public class MyEventObserver {
     public PropertyChangeListener listener;
+
     public MyEventObserver(PropertyChangeListener listener) {
         this.listener = listener;
     }

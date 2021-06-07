@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">PlannterBeta</string>
+    <string name="app_name">Plannter</string>
     <string name="ALERT_CONFIRM">Confirm</string>
     <string name="ALERT_DENY">Deny</string>
     <string name="sort_spinner_name">Sort by:</string>
     <string-array name="sort_spinner_entries">
-        <item>Date ↓</item>
-        <item>Date ↑</item>
-        <item>Alphabet ↓</item>
-        <item>Alphabet ↑</item>
+        <item>Дате ↓</item>
+        <item>Дате ↑</item>
+        <item>Названию ↓</item>
+        <item>Названию ↑</item>
     </string-array>
     <string name="isChecklist_change_btn_default">Change view to checklist</string>
     <string name="isChecklist_change_btn_active">Disable checklist appearance</string>

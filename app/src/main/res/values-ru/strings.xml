@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Plannter</string>
+    <string name="ALERT_CONFIRM">Подтвердить</string>
+    <string name="ALERT_DENY">Отклонить</string>
+    <string name="sort_spinner_name">Сортировка по:</string>
+    <string name="isChecklist_change_btn_default">Перейти к чек-листу</string>
+    <string name="isChecklist_change_btn_active">Отключить отображение чек-листа</string>
+    <string name="hello_blank_fragment">Здоровеньки булы друзи</string>
+</resources>

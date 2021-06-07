@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        tvTest = findViewById(R.id.tvTestArea);
         addBtn = findViewById(R.id.fabAddNote);
         sortSpinner = findViewById(R.id.mainActivity_sortingSpinner);
 
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Take clicked note data and open it to edit
         addBtn.setOnClickListener((v) -> {
-            PlainNote newNote = new PlainNote("Hello world", "");
+            PlainNote newNote = new PlainNote("", "");
             Intent intent = new Intent(this, PlainNoteEditActivity.class);
             intent.putExtra("noteTitle", newNote.getTitle());
             intent.putExtra("noteInnerText", newNote.getInnerText());
@@ -92,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
                 String[] sortConditions = itemValue.split(" ");
                 StringBuilder newSelectedSort = new StringBuilder();
                 switch (sortConditions[0]) {
-                    case "Date":
+                    case "Дате":
                         newSelectedSort.append("timeInMillis ");
                         break;
-                    case "Alphabet":
+                    case "Названию":
                         newSelectedSort.append("title ");
                         break;
                     default:
