@@ -56,7 +56,7 @@ public class ChecklistFragment extends Fragment {
         PlainNote viewModelNote = viewModel.getNote().getValue();
 
         rowsArray = viewModelNote.getInnerText().split("\n");
-        viewModel.getNote().observe(requireActivity(), note -> {
+        viewModel.getNote().observe(getViewLifecycleOwner(), note -> {
             rowsArray = note.getInnerText().split("\n");
             ChecklistTapeAdapter newTapeAdapter = new ChecklistTapeAdapter(requireActivity() , rowsArray);
             rvChecklistTape.setAdapter(newTapeAdapter);

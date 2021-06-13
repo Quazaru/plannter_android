@@ -44,7 +44,7 @@ public class PlainNoteInnerTextFragment extends Fragment {
         innerTextView.setVerticalScrollBarEnabled(true);
         innerTextView.setMovementMethod(new ScrollingMovementMethod());
         innerTextView.setText(noteViewModel.getNote().getValue().getInnerText());
-        noteViewModel.getNote().observe(requireActivity(), currentNote -> {
+        noteViewModel.getNote().observe(getViewLifecycleOwner(), currentNote -> {
             innerTextView.setText(currentNote.getInnerText());
         });
 

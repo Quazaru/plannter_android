@@ -100,7 +100,10 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
         // Init and view fragments
         // set data to fragment's visibility
+
+
         noteViewModel = new ViewModelProvider(this).get(PlainNoteViewModel.class);
+
         noteToSaveNotifier = new MyEventNotifier();
         noteDidSaveNotifier = new MyEventNotifier();
         noteViewModel.setNote(currentNote);
@@ -166,7 +169,7 @@ public class PlainNoteEditActivity extends AppCompatActivity {
 
             noteViewModel.setNote(newNote);
             saveNote(newNote);
-
+            nsvOptionsMenu.setVisibility(View.GONE);
 
         });
 
@@ -214,6 +217,7 @@ public class PlainNoteEditActivity extends AppCompatActivity {
         PlainNote newNote;
         PlainNote viewModelNote = noteViewModel.getNote().getValue();
 
+        assert viewModelNote != null;
         newNote = new PlainNote(noteTitleView.getText().toString(), viewModelNote.getInnerText(), new String[] {""});
         newNote.setId(currentNote.getId());
         newNote.setCheckList(currentNote.isCheckList());
